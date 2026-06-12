@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}My Events{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+    <div>
+        <h1 class="page-title">My Enrolled Events</h1>
+        <p class="subtitle">Manage the events you joined.</p>
+    </div>
+</div>
+
+<div class="cards-grid">
+    {% for event in events %}
+        <div class="event-card">
+            <h3>{{ event.title }}</h3>
+            <p><strong>Date:</strong> {{ event.date_time.strftime("%Y-%m-%d %H:%M") }}</p>
+            <p><strong>Location:</strong> {{ event.location }}</p>
+            <p><strong>Summary:</strong> {{ event.short_description }}</p>
+
+            <div class="card-actions">
+                <a href="{{ url_for('event_detail', event_id=event.id) }}" class="btn btn-primary">View detail</a>
+                <a href="{{ url_for('cancel_registration', event_id=event.id) }}" class="btn btn-secondary">Cancel registration</a>
+            </div>
+        </div>
+    {% else %}
+        <div class="event-card">
+            <h3>No enrolled events</h3>
+            <p>You are not registered in any event yet.</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

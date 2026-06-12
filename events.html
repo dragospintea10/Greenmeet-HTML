@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}All Events{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+    <div>
+        <h1 class="page-title">All Events</h1>
+        <p class="subtitle">Browse and explore the available events.</p>
+    </div>
+</div>
+
+<form method="GET" action="{{ url_for('list_events') }}" class="filter-card">
+    <div class="filter-grid">
+        <div>
+            <label>Search</label>
+            <input type="text" name="search" placeholder="Title or summary" value="{{ request.args.get('search', '') }}">
+        </div>
+        <div>
+            <label>Category</label>
+            <input type="text" name="category" placeholder="Category" value="{{ request.args.get('category', '') }}">
+        </div>
+        <div>
+            <label>Location</label>
+            <input type="text" name="location" placeholder="Location" value="{{ request.args.get('location', '') }}">
+        </div>
+        <div>
+            <label>Date</label>
+            <input type="text" name="date" placeholder="YYYY-MM-DD" value="{{ request.args.get('date', '') }}">
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </div>
+</form>
+
+<div class="cards-grid">
+    {% for event in events %}
+        <div class="event-card">
+            <h3>{{ event.title }}</h3>
+            <p><strong>Date:</strong> {{ event.date_time.strftime("%Y-%m-%d %H:%M") }}</p>
+            <p><strong>Location:</strong> {{ event.location }}</p>
+            <p><strong>Summary:</strong> {{ event.short_description }}</p>
+            <div class="card-actions">
+                <a href="{{ url_for('event_detail', event_id=event.id) }}" class="btn btn-primary">View detail</a>
+            </div>
+        </div>
+    {% else %}
+        <div class="event-card">
+            <h3>No events found</h3>
+            <p>No events match your filters.</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

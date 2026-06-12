@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}GreenMeet{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div>
+                <h1 class="logo">GreenMeet</h1>
+
+                <nav class="menu">
+                    <a href="{{ url_for('home') }}" class="menu-item {% if request.endpoint == 'home' %}active{% endif %}">Home</a>
+                    <a href="{{ url_for('list_events') }}" class="menu-item {% if request.endpoint == 'list_events' %}active{% endif %}">All Events</a>
+
+                    {% if session.get('user_id') %}
+                        <a href="{{ url_for('my_events') }}" class="menu-item {% if request.endpoint == 'my_events' %}active{% endif %}">My Events</a>
+                        <a href="{{ url_for('profile') }}" class="menu-item {% if request.endpoint == 'profile' %}active{% endif %}">Profile</a>
+
+                        {% if session.get('is_admin') %}
+                            <a href="{{ url_for('admin_dashboard') }}" class="menu-item {% if request.endpoint in ['admin_dashboard', 'admin_create_event', 'admin_edit_event', 'admin_categories', 'admin_event_registrations'] %}active{% endif %}">Backoffice</a>
+                        {% endif %}
+                    {% endif %}
+                </nav>
+            </div>
+
+            <div class="bottom-menu">
+                {% if session.get('user_id') %}
+                    <a href="{{ url_for('logout') }}" class="menu-item">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="menu-item {% if request.endpoint == 'login' %}active{% endif %}">Login</a>
+                    <a href="{{ url_for('register') }}" class="menu-item {% if request.endpoint == 'register' %}active{% endif %}">Register</a>
+                {% endif %}
+            </div>
+        </aside>
+
+        <main class="content">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="flash-message">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>

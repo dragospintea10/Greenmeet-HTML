@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Backoffice{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+    <div>
+        <h1 class="page-title">Backoffice</h1>
+        <p class="subtitle">Protected administration area.</p>
+    </div>
+
+    <div class="card-actions">
+        <a href="{{ url_for('admin_create_event') }}" class="btn btn-primary">Create Event</a>
+        <a href="{{ url_for('admin_categories') }}" class="btn btn-secondary">Manage Categories</a>
+    </div>
+</div>
+
+<div class="cards-grid admin-stats">
+    <div class="event-card green-soft">
+        <h3>{{ users_count }}</h3>
+        <p>Total Users</p>
+    </div>
+    <div class="event-card green-soft">
+        <h3>{{ events_count }}</h3>
+        <p>Total Events</p>
+    </div>
+    <div class="event-card green-soft">
+        <h3>{{ categories_count }}</h3>
+        <p>Total Categories</p>
+    </div>
+    <div class="event-card green-soft">
+        <h3>{{ registrations_count }}</h3>
+        <p>Total Registrations</p>
+    </div>
+</div>
+
+<div class="table-card">
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Category</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+                <tr>
+                    <td>{{ event.title }}</td>
+                    <td>{{ event.date_time.strftime("%Y-%m-%d %H:%M") }}</td>
+                    <td>{{ event.location }}</td>
+                    <td>{{ event.category.name }}</td>
+                    <td class="table-actions">
+                        <a href="{{ url_for('event_detail', event_id=event.id) }}" class="table-link">View</a>
+                        <a href="{{ url_for('admin_edit_event', event_id=event.id) }}" class="table-link">Edit</a>
+                        <a href="{{ url_for('admin_event_registrations', event_id=event.id) }}" class="table-link">Registrations</a>
+                        <form method="POST" action="{{ url_for('admin_delete_event', event_id=event.id) }}" class="inline-form">
+                            <button type="submit" class="danger-link">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

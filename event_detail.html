@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Event Detail{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+    <div>
+        <h1 class="page-title">{{ event.title }}</h1>
+        <p class="subtitle">Event detail and registration area.</p>
+    </div>
+</div>
+
+<div class="info-card">
+    <span class="badge">{{ category_name }}</span>
+    <h2>{{ event.title }}</h2>
+    <p><strong>Description:</strong> {{ event.description }}</p>
+    <p><strong>Date/Time:</strong> {{ event.date_time.strftime("%Y-%m-%d %H:%M") }}</p>
+    <p><strong>Location:</strong> {{ event.location }}</p>
+    <p><strong>Category:</strong> {{ category_name }}</p>
+    <p><strong>Organizer:</strong> {{ organizer_name }}</p>
+    <p><strong>Participants:</strong> {{ participants }}</p>
+
+    <div class="card-actions">
+        {% if session.get('user_id') %}
+            {% if registered %}
+                <a href="{{ url_for('cancel_registration', event_id=event.id) }}" class="btn btn-secondary">Cancel registration</a>
+            {% else %}
+                <a href="{{ url_for('join_event', event_id=event.id) }}" class="btn btn-primary">Join event</a>
+            {% endif %}
+        {% else %}
+            <a href="{{ url_for('login') }}" class="btn btn-primary">Login to join</a>
+        {% endif %}
+
+        <a href="{{ url_for('list_events') }}" class="btn btn-secondary">Back to list</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Event Registrations{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+    <div>
+        <h1 class="page-title">Registrations</h1>
+        <p class="subtitle">{{ event.title }}</p>
+    </div>
+</div>
+
+<div class="info-card">
+    <p><strong>Event:</strong> {{ event.title }}</p>
+    <p><strong>Date:</strong> {{ event.date_time.strftime("%Y-%m-%d %H:%M") }}</p>
+    <p><strong>Location:</strong> {{ event.location }}</p>
+</div>
+
+<div class="table-card">
+    <table>
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Email</th>
+                <th>Registration Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registration in registrations %}
+                <tr>
+                    <td>{{ registration.user.name }}</td>
+                    <td>{{ registration.user.email }}</td>
+                    <td>{{ registration.registration_date.strftime("%Y-%m-%d %H:%M") }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">No registrations for this event.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
